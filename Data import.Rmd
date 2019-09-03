@@ -1,0 +1,123 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(tidyverse)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+read_csv("The first line of metadata
+  The second line of metadata
+  x,y,z
+  1,2,3", skip = 2)
+
+read_csv("# A comment I want to skip
+  x,y,z
+  1,2,3", comment = "#")
+```
+11.2.2 Exercises
+What function would you use to read a file where fields were separated with
+“|”?
+read_delim()
+
+Apart from file, skip, and comment, what other arguments do read_csv() and read_tsv() have in common?
+na, col_names
+
+What are the most important arguments to read_fwf()?
+fwf_widths()
+
+Sometimes strings in a CSV file contain commas. To prevent them from causing problems they need to be surrounded by a quoting character, like " or '. By convention, read_csv() assumes that the quoting character will be ", and if you want to change it you’ll need to use read_delim() instead. What arguments do you need to specify to read the following text into a data frame?
+
+"x,y\n1,'a,b'"
+
+
+```{r}
+read_delim(file = "x,y\n1,'a,b'",  delim= ',', quote= '\'')
+?read_delim
+```
+
+Identify what is wrong with each of the following inline CSV files. What happens when you run the code?
+
+```{r}
+read_csv("a,b\n1,2,3\n4,5,6")
+#wrong number ofcolumns in the first row
+read_csv("a,b,c\n1,2\n1,2,3,4")
+#again, unequal number of columns
+read_csv("a,b\n\"1")
+#incompleted quotes
+read_csv("a,b\n1,2\na,b", na ="na")
+read_csv2("a;b\n1;3")
+#use csv2 forsemincons
+
+
+```
+11.3.5 Exercises
+What are the most important arguments to locale()?
+language, decimal_mark, group_mark
+
+What happens if you try and set decimal_mark and grouping_mark to the same character? 
+Error
+What happens to the default value of grouping_mark when you set decimal_mark to “,”? 
+It becomes the period
+What happens to the default value of decimal_mark when you set the grouping_mark to “.”?
+It becomes the comma
+
+```{r}
+parse_number("100.000,23", locale = locale(grouping_mark = "."))
+
+
+
+```
+
+
+I didn’t discuss the date_format and time_format options to locale(). What do they do? Construct an example that shows when they might be useful.
+
+```{r}
+parse_date("2010-10-01", locale = locale(date_format = %AD))
+
+```
+
+
+If you live outside the US, create a new locale object that encapsulates the settings for the types of file you read most commonly.
+
+What’s the difference between read_csv() and read_csv2()?
+comma v semi-colon deliminated
+
+What are the most common encodings used in Europe? What are the most common encodings used in Asia? Do some googling to find out.
+
+In 2001, the most used encodings in Europe were: 1st (56%): ASCII. 2nd (23%): Western Europe encodings (ISO 8859-1, ISO 8859-15 and cp1252) 
+Asia: UTF-8, GB2312, GBK
+
+Generate the correct format string to parse each of the following dates and times:
+
+```{r}
+d1 <- parse_date("January 1, 2010", format = "%B %d, %Y" )
+d1
+d2 <- parse_date("2015-Mar-07", format = "%Y-%b-%d")
+d2
+d3 <- parse_date("06-Jun-2017", format = "%d-%b-%Y")
+d3
+d4 <- parse_date(c("August 19 (2015)", "July 1 (2015)"), format = "%B %d (%Y)")
+d4
+d5 <- parse_date("12/30/14", "%m/%d/%y")
+d5 # Dec 30, 2014
+t1 <- parse_time("1705", format= "%H%M")
+t1
+t2 <- parse_time("11:15:10 PM", format = "%I:%M:%s %p"
+t2
+```
+
+
+
